@@ -1,20 +1,30 @@
 #include <SFML/Graphics.hpp>
+#include <iostream>
+
+const int WINDOWWIGHT = 1000;  // Window wight
+const int WINDOWHEIGHT = 600;  // Window height
 
 int main() {
-    sf::RenderWindow window(sf::VideoMode(1000, 600), "Dino", sf::Style::Close);
+    // Creating window
+    sf::RenderWindow window(sf::VideoMode(WINDOWWIGHT, WINDOWHEIGHT), "Dino", sf::Style::Close);  // Mode: video, window wight = 1000, window height = 600, name = Dino, style = Close
 
-    sf::Texture backgroundTexture;                              // Creating object "background texture"
+    // Background
+    sf::Texture backgroundTexture;                               // Creating object "background texture"
     backgroundTexture.loadFromFile("Files/Img/BackGround.png");  // Loading background texture
-    sf::Sprite backgroundSprite;                                // Creating background sprite
-    backgroundSprite.setTexture(backgroundTexture);             // Seting background texture
-    backgroundSprite.setPosition(0, 0);                         // Seting background position
+    sf::Sprite backgroundSprite;                                 // Creating background sprite
+    backgroundSprite.setTexture(backgroundTexture);              // Seting background texture
+    backgroundSprite.setPosition(0, 0);                          // Seting background position
 
-    sf::Texture dinoTexture;                           // Creating dino texture
-    dinoTexture.loadFromFile("Files/Img/Dino_1.png");  // Loading dino texture
-    sf::Sprite dinoSprite;                             // Creating dino sprite
-    dinoSprite.setTexture(dinoTexture);                // Seting dino texture
-    dinoSprite.setPosition(25, 50);                    // Seting dino position
+    // Dino
+    sf::Texture dinoTexture;                                            // Creating dino texture
+    dinoTexture.loadFromFile("Files/Img/Dino_1.png");                   // Loading dino texture
+    int dinoWight = 80;                                                 // Dino wight
+    int dinoHeight = 140;                                               // Dino height
+    sf::Sprite dinoSprite;                                              // Creating dino sprite
+    dinoSprite.setTexture(dinoTexture);                                 // Seting dino texture
+    dinoSprite.setPosition(WINDOWWIGHT / 6, WINDOWHEIGHT - 140 - 100);  // Seting dino position
 
+    // Main loop
     while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event)) {
@@ -22,9 +32,9 @@ int main() {
                 window.close();
         }
 
-        window.clear();
-        window.draw(backgroundSprite);
-        window.draw(dinoSprite);
+        window.clear();                 // Clearing window
+        window.draw(backgroundSprite);  // Drawing background
+        window.draw(dinoSprite);        // Drawing dino
         window.display();
     }
     return 0;
