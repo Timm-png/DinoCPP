@@ -24,4 +24,4 @@ On Linux:
 g++ main.cpp -lsfml-graphics -lsfml-window -lsfml-system
 ```
 
-##### version: 0.0.1alpha
+##### version: 0.0.3alpha
