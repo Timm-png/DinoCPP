@@ -14,7 +14,7 @@ Arch Linux
 ```sh
 pacman -S sfml
 ```
-Fedora/OpenSUSE/RedHut
+Fedora/OpenSUSE/RedHat
 ```sh
 If you are using the rpm distribution, you are not welcome here 
 ```
