@@ -124,6 +124,5 @@ int main() {
         window.draw(cactus[2].objectSprite);
         window.display();
     }
-
     return 0;
 }
