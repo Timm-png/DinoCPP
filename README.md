@@ -19,9 +19,12 @@ Fedora/RedHat
 If you use Fedora or RedHat, you are not welcome here 
 ```
 ### Build
-On Linux:
 ```sh
-g++ main.cpp -lsfml-graphics -lsfml-window -lsfml-system
+cd pathToDinoCPP/bin
+cmake ..
+make
+cd ..
+./DinoCPP
 ```
 
-##### version: 0.0.3alpha
+##### version: 0.0.4alpha

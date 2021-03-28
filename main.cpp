@@ -1,4 +1,4 @@
-#include <time.h>
+#include <ctime>
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
@@ -9,24 +9,24 @@ const int WINDOWHEIGHT = 600;  // Window height
 const int FPS = 60;            // FPS
 
 class Dino {
-   public:
+public:
     sf::Texture dinoTexture;    // Creating dino texture
     sf::Sprite dinoSprite;      // Creating dino sprite
     int dinoWight, dinoHeight;  // Dino wight and height
 
     // Jump
     bool make_jump_flag = false;  // Flag make jump
-   private:
+private:
     int jump_counter = 30;  // Jump counter
 
-   public:
+public:
     Dino(std::string pathToTexture, int wight, int height, int x, int y) {
         dinoTexture.loadFromFile(pathToTexture);  // Loading dino texture
         dinoSprite.setTexture(dinoTexture);       // Seting dino texture
         dinoSprite.setPosition(x, y);             // Seting dino position
     }
 
-   public:
+public:
     // Jump
     void jump() {
         if (jump_counter >= -30) {
@@ -41,7 +41,7 @@ class Dino {
 
 // Background
 class WindowBackground {
-   public:
+public:
     sf::Texture backgoundTexture;  // Creating object texture
     sf::Sprite backgroundSprite;   // Creating background sprite
 
@@ -53,16 +53,19 @@ class WindowBackground {
 };
 
 class Object {
-   public:
+public:
     sf::Texture objectTexture;  // Creating object texture
     sf::Sprite objectSprite;    // Creating object sprite
     sf::Vector2f objectPosition = objectSprite.getPosition();
-    int number;
 
     void setObject(std::string pathToTexture, int wight, int height, int x, int y) {
         objectTexture.loadFromFile(pathToTexture);  // Loading object texture
         objectSprite.setTexture(objectTexture);     // Seting object texture
         objectSprite.setPosition(x, y);             // Setting object position
+    }
+
+    void setPosition(int x, int y) {
+        objectSprite.setPosition(x, y);
     }
 };
 
@@ -112,9 +115,8 @@ int main() {
             dino.jump();
         }
 
-        cactus[0].objectSprite.move(-1, 0);
-        cactus[1].objectSprite.move(-0.1, 0);
-        cactus[2].objectSprite.move(-0.4, 0);
+        int choice = randomCactusNumber(3);
+        cactus[choice].setPosition(cactus[choice].objectPosition.x - 1, cactus[choice].objectPosition.y);
 
         window.clear();                                  // Clearing window
         window.draw(WindowBackground.backgroundSprite);  // Drawing background
