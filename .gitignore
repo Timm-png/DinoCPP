@@ -1,4 +1,3 @@
-.vscode/
-cmake/*
-bin/DinoCPP
-.gitignore
+cmake-build-debug/
+bin/
+.idea/

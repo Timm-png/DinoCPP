@@ -19,12 +19,8 @@ Fedora/RedHat
 If you use Fedora or RedHat, you are not welcome here 
 ```
 ### Build and run
-```sh
-cd pathToDinoCPP/cmake
-cmake ..
-make
-cd ../bin
-./DinoCPP
+Linux:
+```shell
+./BuildAndRun.sh
 ```
-
-##### version: 0.0.4alpha
+##### version: -0.0.6alpha
