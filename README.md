@@ -18,9 +18,18 @@ Fedora/RedHat
 ```sh
 If you use Fedora or RedHat, you are not welcome here 
 ```
-### Build and run
-Linux:
+### Build and run or build or run
+##### Linux:
+Build and run:
 ```shell
-./BuildAndRun.sh
+./scripts/BuildAndRun.sh
+```
+Build:
+```shell
+./scripts/Build.sh
+```
+Run:
+```shell
+./scripts/Run.sh
 ```
 ##### version: -0.0.4alpha (game in development)
