@@ -1,6 +1,6 @@
-#include <ctime>
-
 #include <SFML/Graphics.hpp>
+#include <ctime>
+#include <iostream>
 #include <string>
 
 const int WINDOWWIGHT = 1000;  // Window wight
@@ -19,7 +19,8 @@ private:
     float jump_counter = 30;  // Jump counter
 
 public:
-    Dino(const std::string &pathToTexture, int wight, int height, float x, float y) {
+    Dino(const std::string &pathToTexture, int wight, int height, float x,
+         float y) {
         dinoTexture.loadFromFile(pathToTexture);  // Loading dino texture
         dinoSprite.setTexture(dinoTexture);       // Setting dino texture
         dinoSprite.setPosition(x, y);             // Setting dino position
@@ -44,12 +45,11 @@ public:
 class WindowBackground {
 public:
     sf::Texture backgroundTexture;  // Creating object texture
-    sf::Sprite backgroundSprite;   // Creating background sprite
-
-    explicit WindowBackground(const std::string &pathToTexture) {
+    sf::Sprite backgroundSprite;    // Creating background sprite explicit
+    WindowBackground(const std::string &pathToTexture) {
         backgroundTexture.loadFromFile(pathToTexture);   // Loading object texture
         backgroundSprite.setTexture(backgroundTexture);  // Setting object texture
-        backgroundSprite.setPosition(0, 0);             // Setting background position
+        backgroundSprite.setPosition(0, 0);              // Setting background position
     }
 };
 
@@ -57,58 +57,75 @@ class Object {
 public:
     sf::Texture objectTexture;  // Creating object texture
     sf::Sprite objectSprite;    // Creating object sprite
-    sf::Vector2f objectPosition = objectSprite.getPosition();
-    int objectWight{}, objectHeight{};
+    int objectWight, objectHeight;
     int moveSpeed{};
+    int distanceToNextCactus;
 
-    void setObject(const std::string &pathToTexture, int wight, int height, float x, float y, int moveSpeed) {
+    void setObject(const std::string &pathToTexture, int wight, int height,
+                   float x, float y, int moveSpeed, int distanceToNextCactus) {
         objectTexture.loadFromFile(pathToTexture);  // Loading object texture
         objectSprite.setTexture(objectTexture);     // Setting object texture
         objectSprite.setPosition(x, y);             // Setting object position
         objectWight = wight;
         objectHeight = height;
         this->moveSpeed = moveSpeed;
+        this->distanceToNextCactus = distanceToNextCactus;
     }
 
-    void move(float x, float y) {
-        objectSprite.move(x, y);
-    }
+    void move(float x, float y) { objectSprite.move(x, y); }
 };
 
-int randomCactusNumber(int numberOfOptions) {
-    int return_var = rand() % 3;
-    return return_var;
+int randomCactusIndex(int numberOfOptions) {
+    int result = rand() % 3;
+    return result;
+}
+
+int randomDistanceBetweenObject(int minDistance, int maxDistance) {
+    int difference = maxDistance - minDistance;
+    int result = rand() % difference + minDistance;
+    return result;
+}
+
+void creatingCactusArray(Object array[], int arraySize) {
+    for (int i = 0; i < arraySize; i++) {
+        int randomCactus = randomCactusIndex(3);
+        if (randomCactus == 0) {
+            array[i].setObject("../Files/Img/Cactus_1.png", 40, 88, 1000, 420, 3,
+                               randomDistanceBetweenObject(350, 600));
+        } else if (randomCactus == 1) {
+            array[i].setObject("../Files/Img/Cactus_2.png", 49, 93, 1000, 415, 3,
+                               randomDistanceBetweenObject(350, 600));
+        } else if (randomCactus == 2) {
+            array[i].setObject("../Files/Img/Cactus_3.png", 44, 104, 1000, 405, 3,
+                               randomDistanceBetweenObject(350, 600));
+        }
+    }
 }
 
 int main() {
     // Creating window
-    sf::RenderWindow window(sf::VideoMode(WINDOWWIGHT, WINDOWHEIGHT), "Dino",
-                            sf::Style::Close);  // Mode: video, window wight = 1000, window height = 600, name = Dino, style = Close
+    sf::RenderWindow window(
+            sf::VideoMode(WINDOWWIGHT, WINDOWHEIGHT), "Dino",
+            sf::Style::Close);  // Mode: video, window wight = 1000, window height =
+    // 600, name = Dino, style = Close
 
     // Creating dino
-    Dino dino("../Files/Img/Dino_1.png", 80, 140, WINDOWWIGHT / 6, WINDOWHEIGHT - 140 - 100);
+    Dino dino("../Files/Img/Dino_1.png", 80, 140, WINDOWWIGHT / 6,
+              WINDOWHEIGHT - 140 - 100);
 
     // Creating background window
     WindowBackground WindowBackground("../Files/Img/BackGround.png");
 
-    // Creating cactus
-    int numberOfCacti = 3;
-    Object cactus[numberOfCacti];
-    cactus[0].setObject("../Files/Img/Cactus_1.png", 40, 88, 1000, 420, 3);
-    cactus[1].setObject("../Files/Img/Cactus_2.png", 49, 93, 1000, 415, 3);
-    cactus[2].setObject("../Files/Img/Cactus_3.png", 44, 104, 1000, 405, 3);
-
     // Setting FPS
     window.setFramerateLimit(FPS);
 
+    // Creating cactus
+    int quantityOfCacti = 10;
+    Object cactus[quantityOfCacti];
+    creatingCactusArray(cactus, quantityOfCacti);
+
     // Srand
     srand(time(nullptr));
-
-    const int numberNextCactusSize = 10;
-    int numberNextCactus[numberNextCactusSize];
-    for (int &numberNextCactusLink : numberNextCactus) {
-        numberNextCactusLink = randomCactusNumber(3);
-    }
 
     // Main loop
     while (window.isOpen()) {
@@ -124,11 +141,28 @@ int main() {
         if (dino.make_jump_flag) {
             dino.jump();
         }
+
         window.clear();                                  // Clearing window
         window.draw(WindowBackground.backgroundSprite);  // Drawing background
         window.draw(dino.dinoSprite);                    // Drawing dino
-        cactus[numberNextCactus[0]].move(cactus[numberNextCactus[0]].objectPosition.x - cactus[numberNextCactus[0]].moveSpeed, 0);
-        window.draw(cactus[numberNextCactus[0]].objectSprite);
+        cactus[0].objectSprite.setPosition(cactus[0].objectSprite.getPosition().x - cactus[0].moveSpeed,
+                                           cactus[1].objectSprite.getPosition().y); // Moving first cactus
+        std::cout << cactus[0].objectSprite.getPosition().x - cactus[1].objectSprite.getPosition().x << std::endl;
+        window.draw(cactus[0].objectSprite);  // Drawing first cactus
+
+
+
+
+
+        if (cactus[1].objectSprite.getPosition().x - cactus[0].objectSprite.getPosition().x >=
+            cactus[1].distanceToNextCactus) {
+            cactus[1].objectSprite.setPosition(cactus[1].objectSprite.getPosition().x - cactus[1].moveSpeed,
+                                               cactus[1].objectSprite.getPosition().y);  // Moving next cactus
+            // Drawing next cactus
+        }
+        window.draw(cactus[1].objectSprite);
+
+
         window.display();
     }
     return 0;
