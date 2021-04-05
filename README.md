@@ -1,4 +1,4 @@
-# The project is closed. Because the bug is not fixed 
+# The game is closed. Because the bug is not fixed 
 
 
 ## DinoCPP
