@@ -1,4 +1,7 @@
-# DinoCPP
+# The project is closed. Because the mistake is not fixed 
+
+
+## DinoCPP
 
 DinoCPP is not a game, it is a very bad C++ code(
 
