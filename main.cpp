@@ -59,17 +59,15 @@ class Object {
     sf::Sprite objectSprite;    // Creating object sprite
     int objectWight, objectHeight;
     int objectMoveSpeed{};
-    int objectDistanceToNextCactus;
 
     void setObject(const std::string &pathToTexture, int wight, int height,
-                   float x, float y, int moveSpeed, int distanceToNextCactus) {
+                   float x, float y, int moveSpeed) {
         objectTexture.loadFromFile(pathToTexture);  // Loading object texture
         objectSprite.setTexture(objectTexture);     // Setting object texture
         objectSprite.setPosition(x, y);             // Setting object position
         objectWight = wight;
         objectHeight = height;
         objectMoveSpeed = moveSpeed;
-        objectDistanceToNextCactus = distanceToNextCactus;
     }
 
     void move(float x, float y) { objectSprite.move(x, y); }
@@ -86,20 +84,41 @@ int randomDistanceBetweenObject(int minDistance, int maxDistance) {
     return result;
 }
 
-void creatingCactusArray(Object array[], int fromWhichIndex, int toWhatIndex) {
+void creatingCactusArray(std::vector<Object> &array, int fromWhichIndex, int toWhatIndex) {
     for (int i = fromWhichIndex; i <= toWhatIndex; i++) {
-        int randomCactus = randomCactusIndex(3);
-        if (randomCactus == 0) {
-            array[i].setObject("../Files/Img/Cactus_1.png", 40, 88, 1000, 420, 3,
-                               randomDistanceBetweenObject(350, 700));
-        } else if (randomCactus == 1) {
-            array[i].setObject("../Files/Img/Cactus_2.png", 49, 93, 1000, 415, 3,
-                               randomDistanceBetweenObject(350, 700));
-        } else if (randomCactus == 2) {
-            array[i].setObject("../Files/Img/Cactus_3.png", 44, 104, 1000, 405, 3,
-                               randomDistanceBetweenObject(350, 700));
+        if (i == 0) {
+            int randomCactus = randomCactusIndex(3);
+            if (randomCactus == 0) {
+                array[i].setObject("../Files/Img/Cactus_1.png", 40, 88, 1000, 420, 3);
+            } else if (randomCactus == 1) {
+                array[i].setObject("../Files/Img/Cactus_2.png", 49, 93, 1000, 415, 3);
+            } else if (randomCactus == 2) {
+                array[i].setObject("../Files/Img/Cactus_3.png", 44, 104, 1000, 405, 3);
+            }
+        } else {
+            int randomCactus = randomCactusIndex(3);
+            if (randomCactus == 0) {
+                array[i].setObject("../Files/Img/Cactus_1.png", 40, 88, array[i - 1].objectSprite.getPosition().x + randomDistanceBetweenObject(350, 700), 420, 3);
+            } else if (randomCactus == 1) {
+                array[i].setObject("../Files/Img/Cactus_2.png", 49, 93, array[i - 1].objectSprite.getPosition().x + randomDistanceBetweenObject(350, 700), 415, 3);
+            } else if (randomCactus == 2) {
+                array[i].setObject("../Files/Img/Cactus_3.png", 44, 104, array[i - 1].objectSprite.getPosition().x + randomDistanceBetweenObject(350, 700), 405, 3);
+            }
         }
     }
+}
+
+Object newCactus(int xPastCactuses) {
+    Object result;
+    int randomCactus = randomCactusIndex(3);
+    if (randomCactus == 0) {
+        result.setObject("../Files/Img/Cactus_1.png", 40, 88, xPastCactuses + randomDistanceBetweenObject(350, 700), 420, 3);
+    } else if (randomCactus == 1) {
+        result.setObject("../Files/Img/Cactus_2.png", 49, 93, xPastCactuses + randomDistanceBetweenObject(350, 700), 415, 3);
+    } else if (randomCactus == 2) {
+        result.setObject("../Files/Img/Cactus_3.png", 44, 104, xPastCactuses + randomDistanceBetweenObject(350, 700), 405, 3);
+    }
+    return result;
 }
 
 int main() {
@@ -110,8 +129,7 @@ int main() {
     // 600, name = Dino, style = Close
 
     // Creating dino
-    Dino dino("../Files/Img/Dino_1.png", 80, 140, WINDOWWIGHT / 6,
-              WINDOWHEIGHT - 140 - 100);
+    Dino dino("../Files/Img/Dino_1.png", 80, 140, WINDOWWIGHT / 6, WINDOWHEIGHT - 140 - 100);
 
     // Creating background window
     WindowBackground WindowBackground("../Files/Img/BackGround.png");
@@ -121,16 +139,9 @@ int main() {
 
     srand(time(nullptr));
 
-    // Creating cactus
-    int quantityOfCacti = 10;
-    Object cactus[quantityOfCacti];
-    creatingCactusArray(cactus, 0, 9);
-
-    Object cactus2[quantityOfCacti];
-    creatingCactusArray(cactus2, 0, 9);
-
-    bool moveSecondGenCactiArray = false;
-    bool moveFirstGenCactiArray = true;
+    //Array with textures of cactuses
+    std::vector<Object> arrayWithCactuses(10);
+    creatingCactusArray(arrayWithCactuses, 0, 9);
 
     // Main loop
     while (window.isOpen()) {
@@ -151,52 +162,18 @@ int main() {
         window.draw(WindowBackground.backgroundSprite);  // Drawing background
         window.draw(dino.dinoSprite);                    // Drawing dino
 
-        if (moveFirstGenCactiArray == true) {
-            for (int i = 0; i < quantityOfCacti; i++) {
-                if (i == 0) {
-                    cactus[i].objectSprite.setPosition(cactus[i].objectSprite.getPosition().x - cactus[i].objectMoveSpeed, cactus[i].objectSprite.getPosition().y);
+        // Moving, drawing and generating catuses
+        for (int i = 0; i < 10; i++) {
+            arrayWithCactuses[i].objectSprite.setPosition(arrayWithCactuses[i].objectSprite.getPosition().x - arrayWithCactuses[i].objectMoveSpeed, arrayWithCactuses[i].objectSprite.getPosition().y);
+            window.draw(arrayWithCactuses[i].objectSprite);
+            if (arrayWithCactuses[i].objectSprite.getPosition().x < 0 - arrayWithCactuses[i].objectWight) {
+                int cactusWithMaxX = 0;
+                for (int i = 0; i < 10; i++) {
+                    if (arrayWithCactuses[i].objectSprite.getPosition().x > arrayWithCactuses[cactusWithMaxX].objectSprite.getPosition().x) {
+                        cactusWithMaxX = i;
+                    }
                 }
-                if (cactus[i + 1].objectSprite.getPosition().x - cactus[i].objectSprite.getPosition().x >= cactus[i].objectDistanceToNextCactus) {
-                    cactus[i + 1].objectSprite.setPosition(cactus[i + 1].objectSprite.getPosition().x - cactus[i + 1].objectMoveSpeed, cactus[i + 1].objectSprite.getPosition().y);
-                }
-            }
-        }
-        if (moveSecondGenCactiArray == true) {
-            for (int i = 0; i < quantityOfCacti; i++) {
-                if (i == 0) {
-                    cactus2[i].objectSprite.setPosition(cactus2[i].objectSprite.getPosition().x - cactus2[i].objectMoveSpeed, cactus2[i].objectSprite.getPosition().y);
-                }
-                if (cactus2[i + 1].objectSprite.getPosition().x - cactus2[i].objectSprite.getPosition().x >= cactus2[i].objectDistanceToNextCactus) {
-                    cactus2[i + 1].objectSprite.setPosition(cactus2[i + 1].objectSprite.getPosition().x - cactus2[i + 1].objectMoveSpeed, cactus2[i + 1].objectSprite.getPosition().y);
-                }
-            }
-        }
-
-        if (cactus[quantityOfCacti - 1].objectSprite.getPosition().x < 1000 - cactus2[0].objectDistanceToNextCactus) {
-            moveSecondGenCactiArray = true;
-        }
-
-        if (cactus[quantityOfCacti - 1].objectSprite.getPosition().x + cactus[quantityOfCacti - 1].objectWight < 0) {
-            creatingCactusArray(cactus, 0, 9);
-            moveFirstGenCactiArray = false;
-        }
-
-        if (cactus2[quantityOfCacti - 1].objectSprite.getPosition().x < 1000 - cactus[0].objectDistanceToNextCactus) {
-            moveFirstGenCactiArray = true;
-        }
-
-        if (cactus2[quantityOfCacti - 1].objectSprite.getPosition().x + cactus2[quantityOfCacti - 1].objectWight < 0) {
-            creatingCactusArray(cactus2, 0, 9);
-            moveSecondGenCactiArray = false;
-        }
-
-        // Drawing all cacti
-        for (int i = 0; i < quantityOfCacti; i++) {
-            if (0 - cactus[i].objectWight < cactus[i].objectSprite.getPosition().x < 1000) {
-                window.draw(cactus[i].objectSprite);
-            }
-            if (0 - cactus2[i].objectWight < cactus2[i].objectSprite.getPosition().x < 1000) {
-                window.draw(cactus2[i].objectSprite);
+                arrayWithCactuses[i].objectSprite.setPosition(arrayWithCactuses[cactusWithMaxX].objectSprite.getPosition().x + randomDistanceBetweenObject(350, 700), arrayWithCactuses[i].objectSprite.getPosition().y);
             }
         }
 

@@ -1,6 +1,3 @@
-# Develop the game is stop. Because the bug is not fixed 
-
-
 ## DinoCPP
 
 DinoCPP is not a game, it is a very bad C++ code(
@@ -35,4 +32,6 @@ Run:
 ```shell
 ./Scripts/Run.sh
 ```
-##### version: -0.0.4alpha (game in development)
+##### version: -0.0.3alpha (game in development)
+
+###### And, I don't know why this working.
