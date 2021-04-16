@@ -8,6 +8,9 @@ const int WINDOWHEIGHT = 600;  // Window height
 const int FPS = 60;            // FPS
 sf::Font retroFont;
 bool runMainLoop = true;
+sf::RenderWindow window(sf::VideoMode(WINDOWWIGHT, WINDOWHEIGHT), "Dino", sf::Style::Close); // Creating window
+bool pauseVar = false;
+bool gameOverVar = false;
 
 class Dino {
 	public:
@@ -195,36 +198,54 @@ int randomNumber(int fromNumber, int toNumber) {
 	return rand() % difference + fromNumber;
 }
 
-//int gameOver(sf::RenderWindow &window) {
-//	sf::Event event;
-//	while (window.pollEvent(event)) {
-//if (event.type == sf::Event::Closed) {
-//window.close();
-//return 0;
-//}
-//		if ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::Escape)) {
-//			return 1;
-//		} else if ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::Return)) {
-//			return 0;
-//		}
-//	}
-//}
-
-int pause(sf::RenderWindow &window) {
-	sf::Text pauseText("Pause, press ESC, for continue", retroFont, 50); // Creating pauses text
-	pauseText.setPosition(295, 275); // Setting position of pauses text
-	pauseText.setStyle(sf::Text::Regular); // Setting style of pauses text
+int gameOver() {
+	sf::Text gameOverText("Game Over", retroFont, 50); // Creating game over text
+	gameOverText.setPosition(380, 255); // Setting position of game over text
+	gameOverText.setStyle(sf::Text::Regular); // Setting style of game over text
 	sf::Color black(0, 0, 0); // Creating black color
-	pauseText.setColor(black); // Setting color of pauses text
+	gameOverText.setColor(black); // Setting color of game over text
 
-	while (1) {
+	sf::Text gameOverText2("Press Enter for restart or Escape for exit", retroFont, 30); // Creating game over text
+	gameOverText2.setPosition(230, 310); // Setting position of game over text
+	gameOverText2.setStyle(sf::Text::Regular); // Setting style of game over text
+	gameOverText2.setColor(black); // Setting color of game over text
+
+	while (true) {
 		sf::Event event;
 		while (window.pollEvent(event)) {
 			if (event.type == sf::Event::Closed) {
 				window.close();
 				return 0;
 			}
-			if ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::Escape)) {
+			if ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::Escape) && !pauseVar) {
+				return 1;
+			}
+			if ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::Return)) {
+				return 0;
+			}
+
+		}
+		window.draw(gameOverText);
+		window.draw(gameOverText2);
+		window.display();
+	}
+}
+
+int pause() {
+	sf::Text pauseText("Pause, press ESC, for continue", retroFont, 45); // Creating pauses text
+	pauseText.setPosition(200, 275); // Setting position of pauses text
+	pauseText.setStyle(sf::Text::Regular); // Setting style of pauses text
+	sf::Color black(0, 0, 0); // Creating black color
+	pauseText.setColor(black); // Setting color of pauses text
+
+	while (true) {
+		sf::Event event;
+		while (window.pollEvent(event)) {
+			if (event.type == sf::Event::Closed) {
+				window.close();
+				return 0;
+			}
+			if ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::Escape) && !gameOverVar) {
 				return 0;
 			}
 		}
@@ -233,7 +254,7 @@ int pause(sf::RenderWindow &window) {
 	}
 }
 
-int runGame(sf::RenderWindow &window) {
+int runGame() {
 	// Creating dino
 	Dino dino("../Files/Img/Dino_1.png", 80, 140, WINDOWWIGHT / 6, WINDOWHEIGHT - 140 - 100);
 
@@ -253,8 +274,8 @@ int runGame(sf::RenderWindow &window) {
 			if (event.type == sf::Event::Closed) {
 				window.close();
 			}
-			if ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::Escape)) {
-				pause(window);
+			if ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::Escape) && !gameOverVar) {
+				pause();
 			}
 			if ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::Space)) {
 				dino.make_jump_flag = true;  // Jump
@@ -280,36 +301,27 @@ int runGame(sf::RenderWindow &window) {
 		// Checking cactus and dino collision
 		varForFixBug++;
 		if (checkingCactusAndDinoCollision(arrayWithCactuses, dino)) {
-			return 1;
-
-//			else {
-//				if (gameOver(window) == 0) {
-//					return 1;
-//				} else {
-//					window.close();
-//				}
-//			}
+			if (varForFixBug < 10) {
+				return 1;
+			} else {
+				if (gameOver() == 0) {
+					return 1;
+				} else {
+					window.close();
+				}
+			}
 		}
 		window.display();
 	}
 }
 
 int main() {
-	// Creating window
-	sf::RenderWindow window(
-		sf::VideoMode(WINDOWWIGHT, WINDOWHEIGHT), "Dino",
-		sf::Style::Close);  // Mode: video, window wight = 1000, window height =
-	// 600, name = Dino, style = Close
-
-	retroFont.loadFromFile("../Files/Other/8930.ttf"); // Load font
-
-	// Setting FPS
-	window.setFramerateLimit(FPS);
-
+	retroFont.loadFromFile("../Files/Other/Play-Regular.ttf"); // Load font
+	window.setFramerateLimit(FPS); // Setting FPS
 	srand(time(nullptr));
 
 	while (window.isOpen()) {
-		runGame(window);
+		runGame();
 	}
 
 	return 0;
