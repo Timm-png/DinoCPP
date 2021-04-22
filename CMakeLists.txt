@@ -5,4 +5,4 @@ add_executable(DinoCPP main.cpp)
 
 target_link_libraries(DinoCPP sfml-graphics sfml-window sfml-system)
 
-set(EXECUTABLE_OUTPUT_PATH "../bin")
+set(EXECUTABLE_OUTPUT_PATH "..")

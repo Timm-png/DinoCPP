@@ -1,4 +1,7 @@
 cmake/
-bin/
+cmake-minSizeRel/
+cmake-release/
+cmake-relWithDebInfo/
 .idea/
 Releas/
+DinoCPP
