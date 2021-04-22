@@ -18,19 +18,29 @@ Fedora/RedHat
 ```sh
 If you use Fedora or RedHat, you are not welcome here 
 ```
-### Build and run or build or run
+### Run
 ##### Linux:
-Build and run:
+ Download releas linux version and run `DinoCPP`
+
+or
+
+Compile from source code:
 ```shell
 ./Scripts/BuildAndRun.sh
-```
-Build:
-```shell
+
 ./Scripts/Build.sh
-```
-Run:
-```shell
+
 ./Scripts/Run.sh
+```
+
+##### Windows:
+
+Download releas linux version and run `DinoCPP.exe`
+
+orA
+Compile from source code:
+```shell
+path\to\DinoCPPWin>C:\path\to\gcc\g++.exe main.cpp -I "SFML/include" -L "SFML/lib" -lsfml-graphics -lsfml-window -lsfml-system -o DinoCPP.exe
 ```
 ##### version: 0.1beta (game in development)
 
