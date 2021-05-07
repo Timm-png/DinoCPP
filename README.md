@@ -20,7 +20,7 @@ If you use Fedora or RedHat, you are not welcome here
 ```
 ### Run
 #### Linux:
-##### Download releas linux version and run `DinoCPP`
+##### Download releas for [linux](https://github.com/Timm-png/DinoCPP/releases/tag/v0.2beta) and run `DinoCPP`
 
 or
 
@@ -35,7 +35,7 @@ or
 
 #### Windows:
 
-##### Download releas linux version and run `DinoCPP.exe`
+##### Download releas for [windows](https://github.com/Timm-png/DinoCPP/releases/tag/v0.2beta) and run `DinoCPP.exe`
 
 or
 
@@ -45,6 +45,4 @@ Download [DinoWinSourceCode](https://github.com/Timm-png/DinoCPP/releases/downlo
 ```shell
 path\to\DinoWinSourceCode>C:\path\to\gcc\g++.exe main.cpp -I "SFML/include" -L "SFML/lib" -lsfml-graphics -lsfml-window -lsfml-system -o DinoCPP.exe
 ```
-##### version: 0.2beta (game in development)
-
-###### And, I don't know why this working.
+##### version: 0.2beta
