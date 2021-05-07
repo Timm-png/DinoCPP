@@ -20,7 +20,7 @@ If you use Fedora or RedHat, you are not welcome here
 ```
 ### Run
 #### Linux:
-##### Download releas for [linux](https://github.com/Timm-png/DinoCPP/releases) and run `DinoCPP`
+##### Download releas linux version and run `DinoCPP`
 
 or
 
@@ -35,13 +35,13 @@ or
 
 #### Windows:
 
-##### Download releas for [Windows](https://github.com/Timm-png/DinoCPP/releases) and run `DinoCPP.exe`
+##### Download releas linux version and run `DinoCPP.exe`
 
 or
 
 ##### Compile from source code:
 
-Download [DinoWinSourceCode](https://github.com/Timm-png/DinoCPP/releases)
+Download [DinoWinSourceCode](https://github.com/Timm-png/DinoCPP/releases/download/v0.2beta/DinoWinSourceCode.zip)
 ```shell
 path\to\DinoWinSourceCode>C:\path\to\gcc\g++.exe main.cpp -I "SFML/include" -L "SFML/lib" -lsfml-graphics -lsfml-window -lsfml-system -o DinoCPP.exe
 ```
