@@ -1,7 +1,7 @@
 cd ..
-mkdir bin
-cd cmake-build-debug/
+mkdir cmake
+cd cmake/
 cmake ..
 make
-cd ../bin
+cd ..
 ./DinoCPP
